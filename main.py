@@ -1,6 +1,7 @@
 import pygame
 from os import path
 from text_writer import show_go_screen
+from Player_class import Player
 
 # size
 WIDTH = 600
@@ -45,15 +46,20 @@ def game(fps, width, height, colors, ):
                 # show start screen
                 show_go_screen(screen, background, background_rect, WIDTH, HEIGHT, FPS, clock, colors)
                 game_over = False
-                pass
+                all_sprites = pygame.sprite.Group()
+                player = Player(width, height, player_img, colors)
+                all_sprites.add(player)
+
 
             for event in pygame.event.get():  # now we can close screen
                 if event.type == pygame.QUIT:
                     running = False
 
-                # rendering
-
-           # pygame.display.flip()  # flip screen
+            all_sprites.update()
+            screen.fill(colors['BLACK'])  # rendering
+            screen.blit(background, background_rect)
+            all_sprites.draw(screen)
+            pygame.display.flip()  # flip screen
 
         pygame.quit()  # close screen
 
