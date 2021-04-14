@@ -2,6 +2,7 @@ import pygame
 from os import path
 from text_writer import show_go_screen
 from Player_class import Player
+from ground import Ground
 
 # size
 WIDTH = 600
@@ -20,6 +21,7 @@ colors = dict(
 def game(fps, width, height, colors, ):
 
         # turn pygame on
+        global ground1
         pygame.init()
         # here must be music
 
@@ -36,6 +38,7 @@ def game(fps, width, height, colors, ):
         player_img = pygame.image.load(path.join(img_dir, 'flying.gif')).convert()
         background = pygame.image.load(path.join(img_dir, 'bg001.png')).convert()
         background_rect = background.get_rect()
+        ground_img = pygame.image.load(path.join(img_dir, 'ground.png'))
 
 
         running = True
@@ -49,6 +52,9 @@ def game(fps, width, height, colors, ):
                 all_sprites = pygame.sprite.Group()
                 player = Player(width, height, player_img, colors)
                 all_sprites.add(player)
+                ground1 = Ground(width, height, ground_img, colors)
+                ground2 = Ground(width, height, ground_img, colors)
+                all_sprites.add(ground1)
 
 
             for event in pygame.event.get():  # now we can close screen
@@ -56,6 +62,11 @@ def game(fps, width, height, colors, ):
                     running = False
 
             all_sprites.update()
+            # make infinity ground
+            # if ground1.rect.left < (ground1.img_height - ground1.w):
+            if ground1.rect.left < (-90):
+                all_sprites.add(ground2)
+
             screen.fill(colors['BLACK'])  # rendering
             screen.blit(background, background_rect)
             all_sprites.draw(screen)
